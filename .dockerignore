@@ -1,0 +1,10 @@
+.git
+
+*.key
+*.000
+*.pem
+*.cer
+*.before-*
+
+config.json
+secrets/
