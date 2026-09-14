@@ -1,0 +1,30 @@
+# Runtime configuration and secrets
+config.json
+config.*.json
+!config.example.json
+.env
+.env.*
+secrets/
+
+# Certificates, private keys and CryptoPro containers
+certs/*
+!certs/README.md
+*.cer
+*.crt
+*.key
+*.pem
+*.p12
+*.pfx
+*.000
+
+# Proprietary CryptoPro packages
+deploy/cryptopro/*.deb
+
+# Local build artifacts
+callback-server
+coverage.out
+*.log
+*.before-*
+.idea/
+.vscode/
+.DS_Store

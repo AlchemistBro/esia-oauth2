@@ -1,0 +1,12 @@
+{
+  "redirect_uri": "https://service.example.com/auth/esia/callback",
+  "mnemonic": "DEMO_CLIENT",
+  "esia_uri": "https://esia.example.test",
+  "csp_test_path": "/usr/local/bin/csptest-wrapper",
+  "csp_container": "\\\\.\\HDIMAGE\\example-container",
+  "cert_hash": "0000000000000000000000000000000000000000",
+  "http_listen_addr": ":8000",
+  "esia_response_cert_path": "/app/certs/tesia-gost.cer",
+  "id_token_algorithm": "GOST3410_2012_256",
+  "id_token_issuer": "https://esia.example.test/"
+}

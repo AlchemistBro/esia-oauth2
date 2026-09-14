@@ -1,0 +1,26 @@
+services:
+  esia-callback:
+    build: .
+    image: esia-callback:local
+    restart: unless-stopped
+    expose:
+      - "8000"
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./certs/tesia-gost.cer:/app/certs/tesia-gost.cer:ro
+      - ./deploy/csptest-wrapper:/usr/local/bin/csptest-wrapper:ro
+      - ./secrets/csp-pin:/run/secrets/csp-pin:ro
+      - ./secrets/key-container:/var/opt/cprocsp/keys/root/key-container:rw
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 128
+    mem_limit: 384m
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+pin_file=/run/secrets/csp-pin
+if [ ! -r "$pin_file" ]; then
+    echo "CryptoPro PIN secret is unavailable" >&2
+    exit 1
+fi
+
+IFS= read -r csp_pin < "$pin_file" || [ -n "$csp_pin" ]
+printf '%s\n' "$csp_pin" | /opt/cprocsp/bin/amd64/csptest "$@"
