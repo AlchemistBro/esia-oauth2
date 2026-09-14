@@ -11,7 +11,7 @@ COPY . .
 RUN CGO_ENABLED=0 go build -o /out/callback-server .
 
 
-FROM debian:12-slim AS runtime
+FROM debian:13-slim AS runtime
 
 COPY deploy/cryptopro/*.deb /tmp/cryptopro/
 
