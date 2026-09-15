@@ -3,10 +3,10 @@
   "mnemonic": "DEMO_CLIENT",
   "esia_uri": "https://esia.example.test",
   "csp_test_path": "/opt/cprocsp/bin/amd64/csptest",
-  "csp_container": "\\\\.\\HDIMAGE\\example-container",
+  "csp_container": "example-client-key-container",
   "cert_hash": "0000000000000000000000000000000000000000",
   "http_listen_addr": ":8000",
-  "esia_response_cert_path": "/app/certs/tesia-gost.cer",
+  "esia_response_cert_path": "/app/certs/tesia-response.cer",
   "id_token_algorithm": "GOST3410_2012_256",
   "id_token_issuer": "https://esia.example.test/"
 }

@@ -1,10 +1,23 @@
 .git
+.github
+docs
+README.md
 
 *.key
 *.000
 *.pem
 *.cer
+*.crt
+*.p12
+*.pfx
+*.har
+*.log
 *.before-*
+*.bak
 
 config.json
+.env
+.env.*
 secrets/
+callback_server
+coverage.out
