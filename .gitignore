@@ -1,0 +1,37 @@
+# Runtime configuration and environment
+config.json
+config.*.json
+!config.example.json
+.env
+.env.*
+
+# Credentials, certificates and CryptoPro material
+secrets/
+*.pin
+*.key
+*.000
+*.pem
+*.cer
+*.crt
+*.p12
+*.pfx
+deploy/cryptopro/
+
+# Diagnostics and backups
+*.har
+*.log
+*.before-*
+*.bak
+*.backup
+
+# Build and test output
+callback_server
+*.test
+coverage.out
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+services:
+  esia-callback:
+    build:
+      context: .
+    image: esia-callback:local
+    restart: unless-stopped
+    expose:
+      - "8000"
+    volumes:
+      - ./config.json:/app/config.json:ro
+      - ./certs/tesia-response.cer:/app/certs/tesia-response.cer:ro
+      - ./secrets/client-key-container:/var/opt/cprocsp/keys/service/client-key-container:rw
+    networks:
+      - backend
+
+networks:
+  backend:
+    name: esia-backend
