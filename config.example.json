@@ -1,12 +1,26 @@
 {
   "redirect_uri": "https://service.example.com/auth/esia/callback",
   "mnemonic": "DEMO_CLIENT",
-  "esia_uri": "https://esia.example.test",
-  "csp_test_path": "/opt/cprocsp/bin/amd64/csptest",
-  "csp_container": "example-client-key-container",
-  "cert_hash": "0000000000000000000000000000000000000000",
+  "esia_uri": "https://esia-portal1.test.gosuslugi.ru",
+  "csp_test_path": "/usr/local/bin/csptest-wrapper",
+  "csp_container": "00000000-0000-0000-0000-000000000000",
+  "cert_hash": "0000000000000000000000000000000000000000000000000000000000000000",
   "http_listen_addr": ":8000",
   "esia_response_cert_path": "/app/certs/tesia-response.cer",
   "id_token_algorithm": "GOST3410_2012_256",
-  "id_token_issuer": "https://esia.example.test/"
+  "id_token_issuer": "http://esia-portal1.test.gosuslugi.ru/",
+  "oauth": {
+    "scopes": ["openid"]
+  },
+  "consent": {
+    "permissions": [
+      {
+        "sysname": "APIPGU",
+        "expire": 525600,
+        "actions": [{ "sysname": "ALL_ACTIONS_TO_DATA" }],
+        "purposes": [{ "sysname": "APIPGU" }],
+        "scopes": [{ "sysname": "fullname" }, { "sysname": "email" }]
+      }
+    ]
+  }
 }

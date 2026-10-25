@@ -15,8 +15,8 @@
 - OAuth endpoints принимают только GET;
 - ID token должен использовать настроенный фиксированный `alg`;
 - `typ` допускается отсутствующим или равным `JWT`;
-- заголовок ID token обязан содержать `sbt=id`;
-- подпись проверяется через CryptoPro GOST или RSA public key;
+- подпись проверяется через CryptoPro GOST или RSA public key, ГОСТ-подпись
+  приводится к порядку байтов, который ожидает `csptest`;
 - проверяются `iss`, `aud`, `sub`, `exp`, `nbf` и `iat`;
 - HTTP client и server имеют ограниченные timeouts;
 - ответы OAuth flow помечаются `Cache-Control: no-store` и
@@ -24,7 +24,9 @@
 
 ## Работа с secrets
 
-Private key container не должен храниться в image. Реальные configuration,
+Private key container не должен храниться в image. PIN контейнера читается
+обёрткой `deploy/csptest-wrapper.sh` из файла-секрета и передаётся `csptest`
+только на время вызова подписи внутри изолированного контейнера. Реальные configuration,
 certificates, key containers, PIN files и HAR исключены из Git и Docker build
 context. В runtime их следует передавать отдельными mounts с минимальными
 правами.

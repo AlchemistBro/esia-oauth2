@@ -3,13 +3,25 @@ services:
     build:
       context: .
     image: esia-callback:local
+    container_name: esia-callback
     restart: unless-stopped
     expose:
       - "8000"
     volumes:
       - ./config.json:/app/config.json:ro
       - ./certs/tesia-response.cer:/app/certs/tesia-response.cer:ro
-      - ./secrets/client-key-container:/var/opt/cprocsp/keys/service/client-key-container:rw
+      - ./deploy/csptest-wrapper.sh:/usr/local/bin/csptest-wrapper:ro
+      - ./secrets/csp-pin:/run/secrets/csp-pin:ro
+      # Каталог ключа *.000 из УЦ. Имя внутри контейнера: до 8 символов + .000
+      - ./secrets/key-container:/var/opt/cprocsp/keys/root/esiakey.000:rw
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 128
+    mem_limit: 384m
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
     networks:
       - backend
 

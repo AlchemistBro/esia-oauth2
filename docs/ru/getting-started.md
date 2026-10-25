@@ -24,8 +24,8 @@ Private key container, PIN, сертификаты и лицензированн
 1. Клонируйте репозиторий:
 
    ```bash
-   git clone <your-repository-url>
-   cd esia
+   git clone https://github.com/AlchemistBro/esia-oauth2.git
+   cd esia-oauth2
    ```
 
 2. Создайте локальную конфигурацию:
@@ -58,8 +58,9 @@ go run . -config ./config.json
 https://service.example.com/auth/esia/login
 ```
 
-При успешном flow callback возвращает HTTP 200 и текст
-`авторизация через ЕСИА завершена`.
+При успешном flow callback возвращает HTTP 200, текст
+`авторизация через ЕСИА завершена`, а также ФИО и email пользователя, если они
+запрошены в `consent.permissions`.
 
 ## Следующие шаги
 

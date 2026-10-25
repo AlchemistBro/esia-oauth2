@@ -46,11 +46,15 @@ func TestWithoutNilPermissions(t *testing.T) {
 		}
 	})
 
-	t.Run("rejects unexpected permissions", func(t *testing.T) {
+	t.Run("preserves real permissions byte-for-byte", func(t *testing.T) {
 		const authURI = "https://esia.example.test/aas/oauth2/v2/ac?permissions=eyJ1c2VkIjp0cnVlfQ"
 
-		if _, err := withoutNilPermissions(authURI); err == nil {
-			t.Fatal("withoutNilPermissions() error = nil, want error")
+		got, err := withoutNilPermissions(authURI)
+		if err != nil {
+			t.Fatalf("withoutNilPermissions() error = %v", err)
+		}
+		if got != authURI {
+			t.Fatalf("withoutNilPermissions() = %q, want byte-for-byte unchanged URI", got)
 		}
 	})
 
@@ -59,4 +63,17 @@ func TestWithoutNilPermissions(t *testing.T) {
 			t.Fatal("withoutNilPermissions() error = nil, want error")
 		}
 	})
+}
+
+func TestCanonicalLocalLoginURL(t *testing.T) {
+	const callback = "http://localhost:8000/callback"
+	if got, want := canonicalLocalLoginURL("127.0.0.1:8000", callback), "http://localhost:8000/auth/esia/login"; got != want {
+		t.Fatalf("canonicalLocalLoginURL() = %q, want %q", got, want)
+	}
+	if got := canonicalLocalLoginURL("localhost:8000", callback); got != "" {
+		t.Fatalf("already canonical host redirected to %q", got)
+	}
+	if got := canonicalLocalLoginURL("127.0.0.1:8000", "https://service.example.test/callback"); got != "" {
+		t.Fatalf("non-local callback redirected to %q", got)
+	}
 }

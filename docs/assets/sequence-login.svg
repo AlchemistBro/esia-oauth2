@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="1218" viewBox="0 0 1280 1218" font-family="Arial, Helvetica, sans-serif" fill="#000000">
+<style>.m{paint-order:stroke;stroke:#FFFFFF;stroke-width:4px;stroke-linejoin:round}</style>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="20" y="32" font-size="20" font-weight="bold">UML · Диаграмма последовательности</text>
+<text x="20" y="52" font-size="13" fill="#555555">Вход через ЕСИА: от нажатия кнопки до проверенного профиля</text>
+<rect x="15" y="70" width="1250" height="1118" fill="none" stroke="#000000"/>
+<path d="M15,70 H177.26540000000003 V84 L167.26540000000003,94 H15 Z" fill="#FFFFFF" stroke="#000000"/>
+<text x="23" y="87" font-size="13" font-weight="bold">sd Вход через ЕСИА</text>
+<circle cx="90" cy="104" r="7" fill="#FFFFFF" stroke="#000000"/>
+<path d="M90,111 V129 M78,117 H102 M90,129 L80,142 M90,129 L100,142" stroke="#000000" fill="none"/>
+<text x="90" y="158" font-size="13" text-anchor="middle">Пользователь</text>
+<line x1="90" y1="166" x2="90" y2="1178" stroke="#000000" stroke-dasharray="5 4"/>
+<rect x="359.15135" y="110" width="141.69730000000004" height="40" fill="#FFFFFF" stroke="#000000"/>
+<text x="430" y="135" font-size="13" text-anchor="middle">: Callback-сервис</text>
+<line x1="430" y1="150" x2="430" y2="1178" stroke="#000000" stroke-dasharray="5 4"/>
+<rect x="592.4354" y="110" width="115.12920000000003" height="40" fill="#FFFFFF" stroke="#000000"/>
+<text x="650" y="135" font-size="13" text-anchor="middle">: StateStore</text>
+<line x1="650" y1="150" x2="650" y2="1178" stroke="#000000" stroke-dasharray="5 4"/>
+<rect x="790.82055" y="110" width="138.3589" height="40" fill="#FFFFFF" stroke="#000000"/>
+<text x="860" y="135" font-size="13" text-anchor="middle">: КриптоПро CSP</text>
+<line x1="860" y1="150" x2="860" y2="1178" stroke="#000000" stroke-dasharray="5 4"/>
+<rect x="1043.0221999999999" y="110" width="73.9556" height="40" fill="#FFFFFF" stroke="#000000"/>
+<text x="1080" y="135" font-size="13" text-anchor="middle">: ЕСИА</text>
+<line x1="1080" y1="150" x2="1080" y2="1178" stroke="#000000" stroke-dasharray="5 4"/>
+<rect x="424" y="190" width="12" height="216" fill="#FFFFFF" stroke="#000000"/>
+<rect x="424" y="554" width="12" height="580" fill="#FFFFFF" stroke="#000000"/>
+<rect x="644" y="270" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="644" y="588" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="854" y="338" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="854" y="748" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="854" y="884" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="1074" y="440" width="12" height="80" fill="#FFFFFF" stroke="#000000"/>
+<rect x="1074" y="816" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="1074" y="998" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="1074" y="1066" width="12" height="34" fill="#FFFFFF" stroke="#000000"/>
+<rect x="30" y="648" width="710" height="76" fill="none" stroke="#000000"/>
+<path d="M30,648 H87.64349999999999 V660 L79.64349999999999,668 H30 Z" fill="#FFFFFF" stroke="#000000"/>
+<text x="36" y="663" font-size="13" font-weight="bold">break</text>
+<text x="97.64349999999999" y="663" font-size="13">[state не найден, истёк или из другого браузера]</text>
+<line x1="96" y1="190" x2="424" y2="190" stroke="#000000" stroke-width="1"/>
+<path d="M424,190 L413,185 L413,195 z" fill="#000000"/>
+<text x="260.0" y="184" font-size="13" text-anchor="middle" class="m">1 : GET /auth/esia/login</text>
+<path d="M436,224 H476 V242 H442" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M452,237 L442,242 L452,247 z" fill="#000000"/>
+<text x="482" y="237" font-size="13" class="m">2 : создать state и browserID</text>
+<line x1="436" y1="270" x2="644" y2="270" stroke="#000000" stroke-width="1"/>
+<path d="M644,270 L633,265 L633,275 z" fill="#000000"/>
+<text x="540.0" y="264" font-size="13" text-anchor="middle" class="m">3 : save(state, browserID, TTL 10 мин)</text>
+<line x1="644" y1="304" x2="436" y2="304" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,299 L436,304 L447,309" fill="none" stroke="#000000"/>
+<text x="540.0" y="298" font-size="13" text-anchor="middle" class="m">4 : ok</text>
+<line x1="436" y1="338" x2="854" y2="338" stroke="#000000" stroke-width="1"/>
+<path d="M854,338 L843,333 L843,343 z" fill="#000000"/>
+<text x="645.0" y="332" font-size="13" text-anchor="middle" class="m">5 : csptest -sign GOST12_256 (запрос кода)</text>
+<line x1="854" y1="372" x2="436" y2="372" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,367 L436,372 L447,377" fill="none" stroke="#000000"/>
+<text x="645.0" y="366" font-size="13" text-anchor="middle" class="m">6 : подпись</text>
+<line x1="424" y1="406" x2="96" y2="406" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M107,401 L96,406 L107,411" fill="none" stroke="#000000"/>
+<text x="260.0" y="400" font-size="13" text-anchor="middle" class="m">7 : 302 → ЕСИА, Set-Cookie __Host-esia_pre_auth</text>
+<line x1="96" y1="440" x2="1074" y2="440" stroke="#000000" stroke-width="1"/>
+<path d="M1074,440 L1063,435 L1063,445 z" fill="#000000"/>
+<text x="585.0" y="434" font-size="13" text-anchor="middle" class="m">8 : GET /aas/oauth2/v2/ac</text>
+<path d="M1086,474 H1126 V492 H1092" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M1102,487 L1092,492 L1102,497 z" fill="#000000"/>
+<text x="1132" y="487" font-size="13" class="m">9 : вход и согласие</text>
+<line x1="1074" y1="520" x2="96" y2="520" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M107,515 L96,520 L107,525" fill="none" stroke="#000000"/>
+<text x="585.0" y="514" font-size="13" text-anchor="middle" class="m">10 : 302 → redirect_uri?code&amp;state</text>
+<line x1="96" y1="554" x2="424" y2="554" stroke="#000000" stroke-width="1"/>
+<path d="M424,554 L413,549 L413,559 z" fill="#000000"/>
+<text x="260.0" y="548" font-size="13" text-anchor="middle" class="m">11 : GET /auth/esia/callback?code&amp;state</text>
+<line x1="436" y1="588" x2="644" y2="588" stroke="#000000" stroke-width="1"/>
+<path d="M644,588 L633,583 L633,593 z" fill="#000000"/>
+<text x="540.0" y="582" font-size="13" text-anchor="middle" class="m">12 : consume(state, browserID)</text>
+<line x1="644" y1="622" x2="436" y2="622" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,617 L436,622 L447,627" fill="none" stroke="#000000"/>
+<text x="540.0" y="616" font-size="13" text-anchor="middle" class="m">13 : true / false</text>
+<line x1="424" y1="700" x2="96" y2="700" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M107,695 L96,700 L107,705" fill="none" stroke="#000000"/>
+<text x="260.0" y="694" font-size="13" text-anchor="middle" class="m">14 : 400 Bad Request</text>
+<line x1="436" y1="748" x2="854" y2="748" stroke="#000000" stroke-width="1"/>
+<path d="M854,748 L843,743 L843,753 z" fill="#000000"/>
+<text x="645.0" y="742" font-size="13" text-anchor="middle" class="m">15 : csptest -sign GOST12_256 (запрос токена)</text>
+<line x1="854" y1="782" x2="436" y2="782" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,777 L436,782 L447,787" fill="none" stroke="#000000"/>
+<text x="645.0" y="776" font-size="13" text-anchor="middle" class="m">16 : подпись</text>
+<line x1="436" y1="816" x2="1074" y2="816" stroke="#000000" stroke-width="1"/>
+<path d="M1074,816 L1063,811 L1063,821 z" fill="#000000"/>
+<text x="755.0" y="810" font-size="13" text-anchor="middle" class="m">17 : POST /aas/oauth2/v3/te (code, client_secret)</text>
+<line x1="1074" y1="850" x2="436" y2="850" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,845 L436,850 L447,855" fill="none" stroke="#000000"/>
+<text x="755.0" y="844" font-size="13" text-anchor="middle" class="m">18 : access_token, id_token</text>
+<line x1="436" y1="884" x2="854" y2="884" stroke="#000000" stroke-width="1"/>
+<path d="M854,884 L843,879 L843,889 z" fill="#000000"/>
+<text x="645.0" y="878" font-size="13" text-anchor="middle" class="m">19 : csptest -verify GOST12_256 (подпись id_token)</text>
+<line x1="854" y1="918" x2="436" y2="918" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,913 L436,918 L447,923" fill="none" stroke="#000000"/>
+<text x="645.0" y="912" font-size="13" text-anchor="middle" class="m">20 : подпись верна</text>
+<path d="M436,952 H476 V970 H442" fill="none" stroke="#000000" stroke-width="1"/>
+<path d="M452,965 L442,970 L452,975 z" fill="#000000"/>
+<text x="482" y="965" font-size="13" class="m">21 : проверить alg, iss, aud, sub, exp, nbf, iat</text>
+<line x1="436" y1="998" x2="1074" y2="998" stroke="#000000" stroke-width="1"/>
+<path d="M1074,998 L1063,993 L1063,1003 z" fill="#000000"/>
+<text x="755.0" y="992" font-size="13" text-anchor="middle" class="m">22 : GET /rs/prns/{oid}</text>
+<line x1="1074" y1="1032" x2="436" y2="1032" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,1027 L436,1032 L447,1037" fill="none" stroke="#000000"/>
+<text x="755.0" y="1026" font-size="13" text-anchor="middle" class="m">23 : ФИО</text>
+<line x1="436" y1="1066" x2="1074" y2="1066" stroke="#000000" stroke-width="1"/>
+<path d="M1074,1066 L1063,1061 L1063,1071 z" fill="#000000"/>
+<text x="755.0" y="1060" font-size="13" text-anchor="middle" class="m">24 : GET /rs/prns/{oid}/ctts</text>
+<line x1="1074" y1="1100" x2="436" y2="1100" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M447,1095 L436,1100 L447,1105" fill="none" stroke="#000000"/>
+<text x="755.0" y="1094" font-size="13" text-anchor="middle" class="m">25 : email</text>
+<line x1="424" y1="1134" x2="96" y2="1134" stroke="#000000" stroke-width="1" stroke-dasharray="6 4"/>
+<path d="M107,1129 L96,1134 L107,1139" fill="none" stroke="#000000"/>
+<text x="260.0" y="1128" font-size="13" text-anchor="middle" class="m">26 : 200 OK: ФИО, email</text>
+</svg>

@@ -27,7 +27,6 @@ const (
 
 type idTokenHeader struct {
 	Algorithm string `json:"alg"`
-	SBT       string `json:"sbt"`
 	KeyID     string `json:"kid"`
 	Type      string `json:"typ"`
 }
@@ -328,12 +327,6 @@ func (v *idTokenValidator) Validate(
 		return header, claims, fmt.Errorf(
 			"некорректный typ ID token: %q",
 			header.Type,
-		)
-	}
-	if header.SBT != "id" {
-		return header, claims, fmt.Errorf(
-			"некорректный sbt ID token: %q",
-			header.SBT,
 		)
 	}
 

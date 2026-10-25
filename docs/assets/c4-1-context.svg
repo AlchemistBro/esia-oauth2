@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1290" height="854" viewBox="0 0 1290 854" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="arr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,1 L12,6 L0,11 z" fill="#707070"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="24" y="32" font-size="22" font-weight="bold" fill="#1F2933">C4 · Уровень 1 · Контекст системы</text>
+<text x="24" y="52" font-size="13" fill="#5F6B7A">Кто пользуется сервисом и с какими внешними системами он работает</text>
+<g transform="translate(0,64)">
+<path d="M280.0,486.4 L440.0,470.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M760.0,470.0 L950.0,470.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M155.0,560.0 L155.0,690.0 L1105.0,690.0 L1105.0,560.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M600.0,220.0 L600.0,380.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M730.0,136.4 L1105.0,136.0 L1105.0,380.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="30" y="390.605" width="250" height="169.39499999999998" rx="43.010000000000005" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<circle cx="155.0" cy="369.1" r="39.1" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<text x="155.0" y="454.0" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Пользователь</text>
+<text x="155.0" y="470.5" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Person]</text>
+<text x="155.0" y="493.4" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Входит в ваше приложение через</text>
+<text x="155.0" y="509.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Госуслуги</text>
+<rect x="470" y="57.97000000000001" width="260" height="162.02999999999997" rx="41.14000000000001" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<circle cx="600.0" cy="37.400000000000006" r="37.400000000000006" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<text x="600.0" y="117.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Администратор ИС</text>
+<text x="600.0" y="134.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Person]</text>
+<text x="600.0" y="157.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Разворачивает сервис, настраивает</text>
+<text x="600.0" y="172.7" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">ключ и сертификаты</text>
+<rect x="440" y="380" width="320" height="180" rx="12" fill="#1168BD" stroke="#0B4884" stroke-width="1.5"/>
+<text x="600.0" y="448.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ESIA OAuth2 Callback</text>
+<text x="600.0" y="465.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Software System]</text>
+<text x="600.0" y="488.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Вход через ЕСИА с ГОСТ-подписью и</text>
+<text x="600.0" y="503.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">проверенным ID token, получает ФИО и email</text>
+<rect x="950" y="380" width="310" height="180" rx="12" fill="#8B8496" stroke="#6E6879" stroke-width="1.5"/>
+<text x="1105.0" y="448.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ЕСИА</text>
+<text x="1105.0" y="465.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Software System, Минцифры]</text>
+<text x="1105.0" y="488.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Аутентификация, выдача токенов, REST API</text>
+<text x="1105.0" y="503.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">данных пользователя</text>
+<rect x="308.6" y="461.2" width="102.8" height="33.9" fill="#FFFFFF"/>
+<text x="360.0" y="475.0" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Начинает вход</text>
+<text x="360.0" y="489.6" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS]</text>
+<rect x="776.0" y="445.2" width="158.0" height="49.5" fill="#FFFFFF"/>
+<text x="855.0" y="459.0" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Подписанные запросы,</text>
+<text x="855.0" y="474.6" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">обмен кода, ФИО и email</text>
+<text x="855.0" y="489.2" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS / JSON]</text>
+<rect x="545.5" y="665.2" width="169.1" height="49.5" fill="#FFFFFF"/>
+<text x="630.0" y="679.0" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Вводит логин и пароль</text>
+<text x="630.0" y="694.6" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Госуслуг, даёт согласие</text>
+<text x="630.0" y="709.2" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS, браузер]</text>
+<rect x="541.3" y="275.2" width="117.5" height="49.5" fill="#FFFFFF"/>
+<text x="600.0" y="289.0" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Разворачивает и</text>
+<text x="600.0" y="304.6" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">настраивает</text>
+<text x="600.0" y="319.2" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[Docker, SSH]</text>
+<rect x="840.9" y="111.4" width="153.1" height="49.5" fill="#FFFFFF"/>
+<text x="917.5" y="125.2" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Регистрирует ИС,</text>
+<text x="917.5" y="140.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">загружает сертификат</text>
+<text x="917.5" y="155.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[Технологический портал]</text>
+</g></svg>

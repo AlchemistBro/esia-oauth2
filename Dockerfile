@@ -1,4 +1,4 @@
-FROM golang:1.25.14-bookworm AS builder
+FROM golang:1.25.5-bookworm AS builder
 
 WORKDIR /src
 
@@ -22,6 +22,13 @@ RUN apt-get update \
     && rm -rf \
         /tmp/cryptopro \
         /var/lib/apt/lists/*
+
+# Серверная лицензия CryptoPro CSP. Без неё работает пробный период 90 дней
+# с момента сборки образа.
+ARG CPRO_LICENSE=""
+RUN if [ -n "$CPRO_LICENSE" ]; then \
+        /opt/cprocsp/sbin/amd64/cpconfig -license -set "$CPRO_LICENSE"; \
+    fi
 
 WORKDIR /app
 

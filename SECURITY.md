@@ -3,7 +3,7 @@
 ## Сообщение об уязвимости
 
 Не публикуйте сведения об уязвимости в обычном Issue. Используйте
-[GitHub Private Security Advisory](https://github.com/AlchemistBro/esia/security/advisories/new)
+[GitHub Private Security Advisory](https://github.com/AlchemistBro/esia-oauth2/security/advisories/new)
 и приложите минимальные шаги воспроизведения, ожидаемое влияние и затронутую
 версию.
 

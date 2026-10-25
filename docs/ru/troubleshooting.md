@@ -12,9 +12,25 @@ cookies, PIN, fingerprints или реальных URL.
 `null`.
 
 Функция `withoutNilPermissions` удаляет только это точное сочетание. Если
-`permissions` отсутствует, URL не меняется. Любое другое значение
-`permissions` отклоняется, чтобы workaround не скрывал неожиданное
-поведение зависимости.
+`permissions` отсутствует или содержит настоящий запрос согласия, URL не
+меняется. Повторяющийся параметр `permissions` отклоняется.
+
+## ЕСИА отвечает `invalid_scope`
+
+ИС не имеет доступа к запрошенным данным. Проверьте, что scopes из
+`consent.permissions` (`fullname`, `email`) разрешены для вашей ИС на
+технологическом портале, или временно уберите блок `consent`, чтобы проверить
+обычный OpenID-вход.
+
+## Подпись не работает в Docker, а на хосте работает
+
+Почти всегда это права или PIN:
+
+- при `cap_drop: ALL` файлы ключа и PIN должны принадлежать root, см.
+  [права на файлы ключа](./cryptopro.md#права-на-файлы-ключа);
+- если на контейнере есть PIN, `csp_test_path` должен указывать на
+  `csptest-wrapper`, а файл PIN не должен заканчиваться переводом строки;
+- пробный период CryptoPro закончился: проверьте `cpconfig -license -view`.
 
 ## CryptoPro container not found
 
@@ -51,7 +67,7 @@ certificate reverse proxy.
 
 Проверьте согласованность `id_token_algorithm`, `id_token_issuer`,
 `mnemonic` и TESIA response certificate с выбранным контуром. Token будет
-отклонён также при неверной подписи, `sbt`, audience, subject или временных
+отклонён также при неверной подписи, audience, subject или временных
 claims.
 
 Не отключайте отдельные проверки для обхода ошибки. Сначала подтвердите

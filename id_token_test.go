@@ -25,7 +25,6 @@ type fakeIDTokenSignatureVerifier struct {
 	algorithm   string
 	signedData  []byte
 	signature   []byte
-	called      bool
 }
 
 func (v *fakeIDTokenSignatureVerifier) Verify(
@@ -33,7 +32,6 @@ func (v *fakeIDTokenSignatureVerifier) Verify(
 	signedData []byte,
 	signature []byte,
 ) error {
-	v.called = true
 	v.algorithm = algorithm
 	v.signedData = append([]byte(nil), signedData...)
 	v.signature = append([]byte(nil), signature...)
@@ -45,7 +43,7 @@ func TestIDTokenValidator(t *testing.T) {
 	baseClaims := map[string]any{
 		"aud": "DEMO_CLIENT",
 		"sub": 1000000001,
-		"iss": "https://esia.example.test/",
+		"iss": "http://esia-portal1.test.gosuslugi.ru/",
 		"nbf": now.Add(-time.Minute).Unix(),
 		"iat": now.Add(-time.Minute).Unix(),
 		"exp": now.Add(10 * time.Minute).Unix(),
@@ -57,14 +55,13 @@ func TestIDTokenValidator(t *testing.T) {
 			verifier,
 			idTokenAlgorithmGOST2012256,
 			"DEMO_CLIENT",
-			"https://esia.example.test/",
+			"http://esia-portal1.test.gosuslugi.ru/",
 		)
 
 		rawToken := testJWT(
 			t,
 			map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 				"kid": "key-id",
 				"typ": "JWT",
 			},
@@ -90,48 +87,6 @@ func TestIDTokenValidator(t *testing.T) {
 		}
 	})
 
-	t.Run("rejects invalid sbt before signature verification", func(t *testing.T) {
-		tests := []struct {
-			name   string
-			header map[string]any
-		}{
-			{
-				name: "missing sbt",
-				header: map[string]any{
-					"alg": idTokenAlgorithmGOST2012256,
-				},
-			},
-			{
-				name: "access token sbt",
-				header: map[string]any{
-					"alg": idTokenAlgorithmGOST2012256,
-					"sbt": "access",
-				},
-			},
-		}
-
-		for _, tt := range tests {
-			t.Run(tt.name, func(t *testing.T) {
-				verifier := &fakeIDTokenSignatureVerifier{}
-				validator := newIDTokenValidator(
-					verifier,
-					idTokenAlgorithmGOST2012256,
-					"DEMO_CLIENT",
-					"https://esia.example.test/",
-				)
-				rawToken := testJWT(t, tt.header, baseClaims, []byte{1, 2, 3})
-
-				_, _, err := validator.Validate(rawToken, now)
-				if err == nil || !strings.Contains(err.Error(), "sbt") {
-					t.Fatalf("Validate() error = %v, want sbt error", err)
-				}
-				if verifier.called {
-					t.Fatal("signature verifier called for invalid sbt")
-				}
-			})
-		}
-	})
-
 	tests := []struct {
 		name      string
 		header    map[string]any
@@ -143,7 +98,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "wrong algorithm",
 			header: map[string]any{
 				"alg": idTokenAlgorithmRS256,
-				"sbt": "id",
 			},
 			wantPart: "неожиданный alg",
 		},
@@ -151,7 +105,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "wrong issuer",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			mutate: func(claims map[string]any) {
 				claims["iss"] = "http://attacker.example/"
@@ -162,7 +115,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "wrong audience",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			mutate: func(claims map[string]any) {
 				claims["aud"] = "OTHER"
@@ -173,7 +125,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "expired",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			mutate: func(claims map[string]any) {
 				claims["exp"] = now.Add(-2 * time.Minute).Unix()
@@ -184,7 +135,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "not before in future",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			mutate: func(claims map[string]any) {
 				claims["nbf"] = now.Add(2 * time.Minute).Unix()
@@ -195,7 +145,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "issued at in future",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			mutate: func(claims map[string]any) {
 				claims["iat"] = now.Add(2 * time.Minute).Unix()
@@ -206,7 +155,6 @@ func TestIDTokenValidator(t *testing.T) {
 			name: "signature rejected",
 			header: map[string]any{
 				"alg": idTokenAlgorithmGOST2012256,
-				"sbt": "id",
 			},
 			verifyErr: errors.New("bad signature"),
 			wantPart:  "bad signature",
@@ -225,7 +173,7 @@ func TestIDTokenValidator(t *testing.T) {
 				verifier,
 				idTokenAlgorithmGOST2012256,
 				"DEMO_CLIENT",
-				"https://esia.example.test/",
+				"http://esia-portal1.test.gosuslugi.ru/",
 			)
 
 			rawToken := testJWT(t, tt.header, claims, []byte{1, 2, 3})

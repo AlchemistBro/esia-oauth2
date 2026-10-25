@@ -23,18 +23,22 @@ HTTPS callback URL, зарегистрированному для ИС.
 Перед сборкой оператор локально создаёт:
 
 ```text
-deploy/cryptopro/           # licensed .deb packages
-certs/tesia-response.cer    # trusted TESIA public certificate
-secrets/client-key-container/
-config.json
+deploy/cryptopro/*.deb        # пакеты CryptoPro CSP 5.0 для Linux amd64
+certs/tesia-response.cer      # публичный сертификат TESIA выбранного контура
+secrets/key-container/        # содержимое каталога ключа *.000 из УЦ
+secrets/csp-pin               # PIN контейнера ключа, без перевода строки
+config.json                   # из config.example.json
 ```
+
+![C4: развёртывание](../assets/c4-4-deployment.svg)
 
 Эти пути исключены из Git. Не заменяйте placeholders в
 `compose.example.yaml` реальными значениями перед commit.
 
 ## Docker Compose
 
-Проверьте mounts и запустите:
+Выставьте права (см. [CryptoPro](./cryptopro.md#права-на-файлы-ключа)),
+проверьте mounts и запустите:
 
 ```bash
 docker compose -f compose.example.yaml build

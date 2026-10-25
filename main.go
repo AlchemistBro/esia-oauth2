@@ -8,10 +8,12 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -128,10 +130,28 @@ func stateFromAuthURI(authURI string) (string, bool) {
 	return state, true
 }
 
-// withoutNilPermissions removes the permissions value that go-api-epgu v0.5.0
-// emits when no consent-platform permissions were requested. The value bnVsbA
-// is base64url-encoded JSON null. ESIA expects this optional parameter to be
-// absent for a plain OpenID authorization request.
+// Локально вход иногда открывают через 127.0.0.1, а callback зарегистрирован на localhost.
+// Для cookie это разные хосты, поэтому сразу приводим вход к одному адресу.
+func canonicalLocalLoginURL(requestHost, redirectURI string) string {
+	callback, err := url.Parse(redirectURI)
+	if err != nil || callback.Scheme != "http" || callback.Hostname() != "localhost" {
+		return ""
+	}
+	host, _, err := net.SplitHostPort(requestHost)
+	if err != nil {
+		host = requestHost
+	}
+	if host != "127.0.0.1" && host != "::1" {
+		return ""
+	}
+	callback.Path = "/auth/esia/login"
+	callback.RawQuery = ""
+	callback.Fragment = ""
+	return callback.String()
+}
+
+// Старая версия библиотеки иногда добавляет permissions=bnVsbA, то есть JSON null.
+// ЕСИА такой параметр не любит, поэтому для обычного OpenID просто убираем его.
 func withoutNilPermissions(authURI string) (string, error) {
 	parsedURI, err := url.Parse(authURI)
 	if err != nil {
@@ -143,8 +163,11 @@ func withoutNilPermissions(authURI string) (string, error) {
 	if !exists {
 		return authURI, nil
 	}
-	if len(permissions) != 1 || permissions[0] != "bnVsbA" {
+	if len(permissions) != 1 {
 		return "", errors.New("authorization URI contains unexpected permissions")
+	}
+	if permissions[0] != "bnVsbA" {
+		return authURI, nil
 	}
 
 	query.Del("permissions")
@@ -208,6 +231,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("не удалось загрузить конфигурацию: %v", err)
 	}
+	requestedScope := config.oauthScope()
+	// Тут специально остается openid: fullname и email запрашиваются ниже внутри permissions.
+	log.Printf("ESIA OAuth scopes configured: %q", config.OAuth.Scopes)
 
 	signer := signature.NewLocalCryptoPro(
 		config.CSPTestPath,
@@ -222,6 +248,7 @@ func main() {
 	oauthClient := aas.
 		NewClient(config.ESIAURI, config.Mnemonic, signer).
 		WithHTTPClient(esiaHTTPClient)
+	resourceClient := newESIAResourceClient(config.ESIAURI, esiaHTTPClient)
 
 	idTokenSignatureVerifier := newESIAIDTokenSignatureVerifier(
 		config.CSPTestPath,
@@ -246,6 +273,10 @@ func main() {
 			http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
+		if canonical := canonicalLocalLoginURL(r.Host, config.RedirectURI); canonical != "" {
+			http.Redirect(w, r, canonical, http.StatusFound)
+			return
+		}
 
 		currentBrowserID, err := getOrCreateBrowserID(r)
 		if err != nil {
@@ -258,7 +289,7 @@ func main() {
 			return
 		}
 
-		uri, err := oauthClient.AuthURI("openid", config.RedirectURI, nil)
+		uri, err := oauthClient.AuthURI(requestedScope, config.RedirectURI, config.Consent.Permissions)
 		if err != nil {
 			log.Print("ошибка создания авторизационной ссылки")
 			http.Error(
@@ -267,6 +298,9 @@ func main() {
 				http.StatusInternalServerError,
 			)
 			return
+		}
+		if parsedURI, parseErr := url.Parse(uri); parseErr == nil {
+			log.Printf("ESIA authorization request scopes: %q", parsedURI.Query().Get("scope"))
 		}
 		uri, err = withoutNilPermissions(uri)
 		if err != nil {
@@ -290,6 +324,7 @@ func main() {
 			return
 		}
 
+		// state привязываем к cookie браузера, чтобы чужой callback нельзя было подсунуть вручную.
 		expiresAt := time.Now().Add(stateTTL)
 
 		saved := pendingStates.save(
@@ -311,7 +346,7 @@ func main() {
 		setPreAuthCookie(w, currentBrowserID, expiresAt)
 		http.Redirect(w, r, uri, http.StatusFound)
 	})
-	mux.HandleFunc("/auth/esia/callback", func(w http.ResponseWriter, r *http.Request) {
+	esiaCallbackHandler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Cache-Control", "no-store")
 		w.Header().Set("Referrer-Policy", "no-referrer")
 
@@ -334,10 +369,10 @@ func main() {
 
 		cookie, err := r.Cookie(preAuthCookieName)
 		if err != nil || !validBrowserID(cookie.Value) {
-			log.Print("в callback отсутствует корректная pre-auth cookie")
+			log.Printf("в callback отсутствует корректная pre-auth cookie: host=%q", r.Host)
 			http.Error(
 				w,
-				"некорректный ответ ЕСИА",
+				"Сессия входа не найдена. Откройте /auth/esia/login в том же браузере и повторите попытку.",
 				http.StatusBadRequest,
 			)
 			return
@@ -356,14 +391,21 @@ func main() {
 			)
 			return
 		}
+		tokenExchangeStarted := time.Now()
 		tokenResponse, err := oauthClient.TokenExchange(
 			code,
-			"openid",
+			requestedScope,
 			config.RedirectURI,
 		)
 
 		if err != nil {
-			log.Print("ошибка обмена кода на токен")
+			// Не записываем code, client_secret или токены: err содержит только
+			// диагностическую причину библиотеки/ЕСИА и безопасен для журнала.
+			log.Printf(
+				"ошибка обмена кода на токен: duration=%s err=%v",
+				time.Since(tokenExchangeStarted).Round(time.Millisecond),
+				err,
+			)
 			http.Error(
 				w,
 				"не удалось завершить авторизацию через ЕСИА",
@@ -383,7 +425,7 @@ func main() {
 			return
 		}
 
-		header, _, err := idTokenValidator.Validate(
+		header, claims, err := idTokenValidator.Validate(
 			tokenResponse.IdToken,
 			time.Now(),
 		)
@@ -403,17 +445,63 @@ func main() {
 			header.KeyID,
 		)
 
+		requestedScopes := config.scopeSet()
+		subjectOID, err := esiaSubjectOID(claims.Subject)
+		if err != nil {
+			log.Printf("в ID token отсутствует корректный OID для запросов данных: %v", err)
+			http.Error(w, "некорректный ответ ЕСИА", http.StatusBadGateway)
+			return
+		}
+
+		person := Person{}
+		if requestedScopes.Has("fullname") {
+			person, err = resourceClient.getPerson(
+				r.Context(),
+				subjectOID,
+				tokenResponse.AccessToken,
+			)
+			if err != nil {
+				log.Printf("не удалось получить профиль ЕСИА: %v", err)
+				http.Error(w, "не удалось получить профиль ЕСИА", http.StatusBadGateway)
+				return
+			}
+		}
+
+		contacts := Contacts{}
+		if requestedScopes.Has("email") {
+			contacts, err = resourceClient.getContacts(
+				r.Context(),
+				subjectOID,
+				tokenResponse.AccessToken,
+			)
+			if err != nil {
+				log.Printf("не удалось получить контакты ЕСИА: %v", err)
+				http.Error(w, "не удалось получить контакты ЕСИА", http.StatusBadGateway)
+				return
+			}
+		}
+
+		fullName := strings.TrimSpace(strings.Join(
+			[]string{person.LastName, person.FirstName, person.MiddleName},
+			" ",
+		))
+		email := contacts.email()
+
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
 
 		if _, err = fmt.Fprint(
 			w,
-			"авторизация через ЕСИА завершена",
+			"авторизация через ЕСИА завершена\n",
+			"ФИО: ", fullName, "\n",
+			"Email: ", email,
 		); err != nil {
 			log.Print("ошибка отправки HTTP-ответа")
 		}
 
-	})
+	}
+	mux.HandleFunc("/auth/esia/callback", esiaCallbackHandler)
+	mux.HandleFunc("/callback", esiaCallbackHandler)
 
 	server := &http.Server{
 		Addr:              config.HTTPListenAddr,

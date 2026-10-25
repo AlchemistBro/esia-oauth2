@@ -5,30 +5,30 @@
 Сервис предоставляет два HTTP endpoint и хранит незавершённые
 авторизационные транзакции в памяти одного процесса.
 
+## Схемы C4
+
+Исходники в формате draw.io лежат в [`docs/diagrams`](../diagrams); их можно
+открыть в [diagrams.net](https://app.diagrams.net) и править.
+
+### Уровень 1. Контекст
+
+![C4: контекст](../assets/c4-1-context.svg)
+
+### Уровень 2. Контейнеры
+
+![C4: контейнеры](../assets/c4-2-containers.svg)
+
+### Уровень 3. Компоненты
+
+![C4: компоненты](../assets/c4-3-components.svg)
+
+### Развёртывание
+
+![C4: развёртывание](../assets/c4-4-deployment.svg)
+
 ## Последовательность
 
-```mermaid
-sequenceDiagram
-    actor Browser
-    participant App as Callback service
-    participant CSP as CryptoPro CSP
-    participant ESIA
-
-    Browser->>App: GET /auth/esia/login
-    App->>CSP: Sign authorization request
-    CSP-->>App: GOST signature
-    App->>App: Store state + browser binding
-    App-->>Browser: 302 to ESIA
-    Browser->>ESIA: Authenticate
-    ESIA-->>Browser: Redirect to callback
-    Browser->>App: GET /auth/esia/callback
-    App->>App: Validate and consume state
-    App->>ESIA: Token Exchange
-    ESIA-->>App: Access token + ID token
-    App->>CSP: Verify GOST ID token signature
-    App->>App: Validate token claims
-    App-->>Browser: HTTP 200
-```
+![UML: последовательность входа](../assets/sequence-login.svg)
 
 ## `GET /auth/esia/login`
 
@@ -40,9 +40,9 @@ cookie `__Host-esia_pre_auth` с атрибутами `Secure`, `HttpOnly` и
 ЕСИА.
 
 Перед redirect функция `withoutNilPermissions` удаляет только точное значение
-`permissions=bnVsbA`, создаваемое зависимостью для JSON `null`. Любое другое
-неожиданное значение приводит к ошибке, то есть workaround работает
-fail-closed.
+`permissions=bnVsbA`, создаваемое зависимостью для JSON `null`. Настоящий
+запрос согласия из `consent.permissions` передаётся без изменений, а
+повторяющийся параметр `permissions` приводит к ошибке.
 
 ## Почему используются и map, и cookie
 
@@ -63,9 +63,18 @@ cookie.
 token.
 
 ID token разбирается как JWT. До дорогостоящей проверки подписи проверяются
-ожидаемый `alg`, допустимый `typ` и обязательный `sbt=id`. Затем сервис
-проверяет ГОСТ- или RSA-подпись, `iss`, `aud`, наличие `sub` и временные
-claims `exp`, `nbf`, `iat` с допустимым clock skew 60 секунд.
+ожидаемый `alg` и допустимый `typ`. Затем сервис проверяет ГОСТ- или
+RSA-подпись, `iss`, `aud`, наличие `sub` и временные claims `exp`, `nbf`,
+`iat` с допустимым clock skew 60 секунд.
+
+ЕСИА передаёт ГОСТ-подпись в JWT в порядке байтов big-endian, а `csptest`
+ожидает обратный порядок. Сервис разворачивает подпись перед проверкой;
+без этого любой корректный токен выглядит поддельным.
+
+Если в `consent.permissions` запрошены `fullname` или `email`, сервис берёт
+OID пользователя из `sub` проверенного токена и запрашивает REST API ЕСИА:
+`/rs/prns/{oid}` для ФИО и `/rs/prns/{oid}/ctts` для email. Access token при
+этом не покидает сервер.
 
 ## Жизненный цикл
 

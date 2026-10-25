@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="924" viewBox="0 0 1440 924" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="arr" viewBox="0 0 12 12" refX="11" refY="6" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,1 L12,6 L0,11 z" fill="#707070"/></marker></defs>
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="24" y="32" font-size="22" font-weight="bold" fill="#1F2933">C4 · Уровень 2 · Контейнеры</text>
+<text x="24" y="52" font-size="13" fill="#5F6B7A">Из чего состоит развёрнутый сервис и как части связаны между собой</text>
+<g transform="translate(0,64)">
+<rect x="340" y="270" width="760" height="580" rx="18" fill="none" stroke="#8A8A8A" stroke-width="1.5" stroke-dasharray="8 4"/>
+<text x="354" y="820" font-size="15" font-weight="bold" fill="#333333">ESIA OAuth2 Callback</text>
+<text x="354" y="838" font-size="12" fill="#333333">[Software System]</text>
+<path d="M145.0,220.0 L145.0,380.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M270.0,460.0 L410.0,460.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M575.0,550.0 L575.0,620.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M740.0,695.0 L870.0,695.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M740.0,460.0 L1150.0,460.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<path d="M260.0,136.0 L1285.0,136.0 L1285.0,370.0" fill="none" stroke="#707070" stroke-width="2" marker-end="url(#arr)"/>
+<rect x="30" y="65.33500000000001" width="230" height="154.665" rx="39.27" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<circle cx="145.0" cy="45.7" r="35.7" fill="#08427B" stroke="#06315C" stroke-width="1.5"/>
+<text x="145.0" y="129.1" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Пользователь</text>
+<text x="145.0" y="145.6" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Person]</text>
+<text x="145.0" y="168.6" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Работает в браузере</text>
+<rect x="20" y="380" width="250" height="160" rx="12" fill="#8B8496" stroke="#6E6879" stroke-width="1.5"/>
+<text x="145.0" y="438.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Reverse proxy</text>
+<text x="145.0" y="455.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Container: nginx]</text>
+<text x="145.0" y="478.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Завершает TLS, проксирует</text>
+<text x="145.0" y="493.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">/auth/esia/*</text>
+<rect x="410" y="370" width="330" height="180" rx="12" fill="#23A2D9" stroke="#0E7DAD" stroke-width="1.5"/>
+<text x="575.0" y="438.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Callback-сервис</text>
+<text x="575.0" y="455.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Container: Go 1.25, net/http]</text>
+<text x="575.0" y="478.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Вход, callback, одноразовый state, проверка ID</text>
+<text x="575.0" y="493.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">token, запросы ФИО и email</text>
+<rect x="410" y="620" width="330" height="150" rx="12" fill="#23A2D9" stroke="#0E7DAD" stroke-width="1.5"/>
+<text x="575.0" y="673.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">КриптоПро CSP 5.0</text>
+<text x="575.0" y="690.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Container: csptest в том же образе]</text>
+<text x="575.0" y="713.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">ГОСТ Р 34.10-2012: подпись запросов и</text>
+<text x="575.0" y="728.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">проверка подписи ID token</text>
+<path d="M870,622 A100.0,12 0 0 1 1070,622 L1070,768 A100.0,12 0 0 1 870,768 Z" fill="#23A2D9" stroke="#0E7DAD" stroke-width="1.5"/>
+<path d="M870,622 A100.0,12 0 0 0 1070,622" fill="none" stroke="#0E7DAD" stroke-width="1.5"/>
+<text x="970.0" y="685.6" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">Контейнер ключа</text>
+<text x="970.0" y="702.1" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Volume: HDIMAGE]</text>
+<text x="970.0" y="725.1" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">Закрытый ключ ИС и PIN,</text>
+<text x="970.0" y="740.8" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">вне образа</text>
+<rect x="1150" y="370" width="270" height="180" rx="12" fill="#8B8496" stroke="#6E6879" stroke-width="1.5"/>
+<text x="1285.0" y="446.5" font-size="17" font-weight="bold" fill="#FFFFFF" text-anchor="middle">ЕСИА</text>
+<text x="1285.0" y="463.0" font-size="12" font-weight="normal" fill="#FFFFFF" text-anchor="middle">[Software System]</text>
+<text x="1285.0" y="485.9" font-size="12.5" font-weight="normal" fill="#D9ECF8" text-anchor="middle">OAuth 2.0 / OIDC, REST API</text>
+<rect x="69.1" y="283.1" width="151.8" height="33.9" fill="#FFFFFF"/>
+<text x="145.0" y="296.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Вход через Госуслуги</text>
+<text x="145.0" y="311.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS]</text>
+<rect x="297.7" y="443.1" width="84.6" height="33.9" fill="#FFFFFF"/>
+<text x="340.0" y="456.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Проксирует</text>
+<text x="340.0" y="471.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTP :8000]</text>
+<rect x="499.6" y="568.0" width="150.9" height="33.9" fill="#FFFFFF"/>
+<text x="575.0" y="581.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Подписать, проверить</text>
+<text x="575.0" y="596.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[exec csptest-wrapper]</text>
+<rect x="760.9" y="678.0" width="88.2" height="33.9" fill="#FFFFFF"/>
+<text x="805.0" y="691.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Читает ключ</text>
+<text x="805.0" y="706.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[файлы]</text>
+<rect x="880.1" y="435.2" width="129.8" height="49.5" fill="#FFFFFF"/>
+<text x="945.0" y="449.0" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Код → токены, ФИО,</text>
+<text x="945.0" y="464.6" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">email</text>
+<text x="945.0" y="479.2" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS / JSON]</text>
+<rect x="679.0" y="119.0" width="186.9" height="33.9" fill="#FFFFFF"/>
+<text x="772.5" y="132.8" font-size="12" font-weight="bold" fill="#404040" text-anchor="middle">Аутентификация и согласие</text>
+<text x="772.5" y="147.4" font-size="11" font-weight="normal" fill="#404040" text-anchor="middle">[HTTPS, редирект]</text>
+</g></svg>
