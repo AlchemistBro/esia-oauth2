@@ -32,7 +32,7 @@ func TestFormalConsentAuthorizationURI(t *testing.T) {
 	}
 
 	client := aas.NewClient("https://esia.example.test", "TEST", consentTestSigner{})
-	uri, err := client.AuthURI(config.oauthScope(), "https://example.test/callback", config.Consent.Permissions)
+	uri, state, err := client.AuthURI(config.oauthScope(), "https://example.test/callback", config.Consent.Permissions)
 	if err != nil {
 		t.Fatalf("AuthURI() error = %v", err)
 	}
@@ -42,6 +42,9 @@ func TestFormalConsentAuthorizationURI(t *testing.T) {
 	}
 	if got := parsed.Query().Get("scope"); got != "openid" {
 		t.Fatalf("scope = %q, want openid", got)
+	}
+	if state == "" || parsed.Query().Get("state") != state {
+		t.Fatalf("authorization state = %q, URI state = %q", state, parsed.Query().Get("state"))
 	}
 	encoded := parsed.Query().Get("permissions")
 	if encoded == "" || encoded == "bnVsbA" {

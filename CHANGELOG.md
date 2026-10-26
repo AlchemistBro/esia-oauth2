@@ -3,6 +3,14 @@
 Формат основан на [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/),
 версии следуют [Semantic Versioning](https://semver.org/lang/ru/).
 
+## [Unreleased]
+
+### Изменено
+
+- `go-api-epgu` обновлена с v0.5.0 до v1.0.1: state берётся из результата
+  `AuthURI`, а `TokenExchange` получает контекст HTTP-запроса и проверяет
+  state ответа ЕСИА. Обход `permissions=null` сохранён.
+
 ## [1.0.0] - 2026-10-25
 
 ### Добавлено

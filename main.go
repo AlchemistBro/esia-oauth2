@@ -111,25 +111,6 @@ func (s *stateStore) runCleanup(ctx context.Context) {
 	}
 }
 
-func stateFromAuthURI(authURI string) (string, bool) {
-	parsedURI, err := url.Parse(authURI)
-	if err != nil {
-		return "", false
-	}
-
-	states, exists := parsedURI.Query()["state"]
-	if !exists || len(states) != 1 {
-		return "", false
-	}
-
-	state := states[0]
-	if state == "" {
-		return "", false
-	}
-
-	return state, true
-}
-
 // Локально вход иногда открывают через 127.0.0.1, а callback зарегистрирован на localhost.
 // Для cookie это разные хосты, поэтому сразу приводим вход к одному адресу.
 func canonicalLocalLoginURL(requestHost, redirectURI string) string {
@@ -289,7 +270,7 @@ func main() {
 			return
 		}
 
-		uri, err := oauthClient.AuthURI(requestedScope, config.RedirectURI, config.Consent.Permissions)
+		uri, loginState, err := oauthClient.AuthURI(requestedScope, config.RedirectURI, config.Consent.Permissions)
 		if err != nil {
 			log.Print("ошибка создания авторизационной ссылки")
 			http.Error(
@@ -313,8 +294,7 @@ func main() {
 			return
 		}
 
-		loginState, ok := stateFromAuthURI(uri)
-		if !ok {
+		if loginState == "" {
 			log.Print("в авторизационной ссылке отсутствует корректный state")
 			http.Error(
 				w,
@@ -393,6 +373,7 @@ func main() {
 		}
 		tokenExchangeStarted := time.Now()
 		tokenResponse, err := oauthClient.TokenExchange(
+			r.Context(),
 			code,
 			requestedScope,
 			config.RedirectURI,

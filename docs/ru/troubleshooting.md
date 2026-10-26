@@ -7,7 +7,7 @@ cookies, PIN, fingerprints или реальных URL.
 
 ## ESIA authorization request возвращает internal error
 
-`go-api-epgu v0.5.0` при `permissions=nil` может добавить параметр
+`go-api-epgu v1.0.1` при `permissions=nil` может добавить параметр
 `permissions=bnVsbA`, где `bnVsbA` — Base64URL-представление JSON
 `null`.
 
